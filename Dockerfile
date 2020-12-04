@@ -18,6 +18,10 @@ RUN unzip /tmp/chromedriver.ZIP -d /usr/local/bin/
 # Set display port as an environment variable
 ENV DISPLAY=:99
 
-VOLUME [ "/app" ]
+COPY requirements.txt /app/
 
 WORKDIR /app
+
+RUN pip install --upgrade pip && pip install -r requirements.txt
+
+VOLUME [ "/app" ]

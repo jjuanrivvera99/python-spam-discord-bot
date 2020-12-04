@@ -24,7 +24,7 @@ def set_chrome_options() -> None:
     chrome_prefs["profile.default_content_settings"] = {"images": 2}
     return chrome_options
 
-def login(driver):
+def login():
     time.sleep(2)
     username = driver.find_element_by_name('email')
     password = driver.find_element_by_name('password')
@@ -42,19 +42,21 @@ def getIntoChannel(channel):
 
 if __name__ == "__main__":
     driver = webdriver.Chrome(options=set_chrome_options())
-    actions = ActionChains(driver)
     driver.get('https://discord.com/login')
-    login(driver)
+    login()
     time.sleep(5)
     getIntoServer(os.getenv("SERVER"))
     time.sleep(2)
     getIntoChannel(os.getenv("CHANNEL"))
     time.sleep(3)
+    pretextArea = driver.find_element_by_xpath('//div[contains(@class,"textArea")]')
+    textArea = pretextArea.find_element_by_xpath('//div[contains(@class,"slateTextArea")]')
     
     while True:
-        pretextArea = driver.find_element_by_xpath('//div[contains(@class,"textArea")]')
-        textArea = pretextArea.find_element_by_xpath('//div[contains(@class,"slateTextArea")]')
+        actions = ActionChains(driver)
+        element = actions.move_to_element(textArea)
         text = get_random_string(8)
-        actions.move_to_element(textArea).send_keys(text).perform()
-        actions.move_to_element(textArea).send_keys(Keys.ENTER).perform()
+        print(text)
+        element.send_keys(text)
+        element.send_keys(Keys.ENTER).perform()
         time.sleep(int(os.getenv("FREQUENCY")))
