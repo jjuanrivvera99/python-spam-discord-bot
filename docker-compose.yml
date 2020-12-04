@@ -1,0 +1,16 @@
+version: "3.7"
+
+services:
+  app:
+    build:
+      context: .
+    restart: always
+    volumes:
+      - ./:/app
+    command: bash -c "pip install --upgrade pip && pip install -r requirements.txt && python ./app.py"
+
+  python:
+    build: 
+      context: .
+    restart: always
+    command: tail -f /dev/null
