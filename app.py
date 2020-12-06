@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from dotenv import load_dotenv
+from datetime import datetime
 import time, os, random, string
 load_dotenv()
 
@@ -40,11 +41,18 @@ def getIntoChannel(channel):
     channel = driver.find_element_by_xpath('//a[contains(@href,"' + channel + '")]')
     channel.click()
 
+def takeScreenshot():
+    now = datetime.now()
+    dateTimeStampString = now.strftime("%Y-%d-%m-%H-%M-%S")
+    print(dateTimeStampString)
+    driver.get_screenshot_as_file('./Screenshots/' + dateTimeStampString + '.png')
+
 if __name__ == "__main__":
     driver = webdriver.Chrome(options=set_chrome_options())
     driver.get('https://discord.com/login')
     login()
     time.sleep(5)
+    takeScreenshot()
     getIntoServer(os.getenv("SERVER"))
     time.sleep(2)
     getIntoChannel(os.getenv("CHANNEL"))
