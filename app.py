@@ -33,11 +33,18 @@ def login():
     password.send_keys(os.getenv("PASSWORD"))
     password.send_keys(Keys.ENTER)
 
+def takeScreenshot():
+    now = datetime.now()
+    dateTimeStampString = now.strftime("%Y-%d-%m-%H-%M-%S")
+    print(dateTimeStampString)
+    driver.get_screenshot_as_file('./Screenshots/' + dateTimeStampString + '.png')
+
 def checkCaptcha():
     try:
         captcha = driver.find_elements_by_class_name('recaptcha-checkbox')
         captcha.click()
         time.sleep(5)
+        takeScreenshot()
     except:
         print('No se pudo resolver el captcha')
 
@@ -51,12 +58,6 @@ def getIntoServer(guild):
 def getIntoChannel(channel):
     channel = driver.find_element_by_xpath('//a[contains(@href,"' + channel + '")]')
     channel.click()
-
-def takeScreenshot():
-    now = datetime.now()
-    dateTimeStampString = now.strftime("%Y-%d-%m-%H-%M-%S")
-    print(dateTimeStampString)
-    driver.get_screenshot_as_file('./Screenshots/' + dateTimeStampString + '.png')
 
 if __name__ == "__main__":
     driver = webdriver.Chrome(options=set_chrome_options())
