@@ -33,9 +33,20 @@ def login():
     password.send_keys(os.getenv("PASSWORD"))
     password.send_keys(Keys.ENTER)
 
+def checkCaptcha():
+    try:
+        captcha = driver.find_elements_by_class_name('recaptcha-checkbox')
+        captcha.click()
+    except:
+        print('No se pudo resolver el captcha')
+
 def getIntoServer(guild):
-    server = driver.find_element_by_xpath('//div[contains(@href,"' + guild + '")]')
-    server.click()
+    try:
+        server = driver.find_element_by_xpath('//div[contains(@href,"' + guild + '")]')
+        server.click()
+    except:
+        print("An exception occurred")
+        checkCaptcha()
 
 def getIntoChannel(channel):
     channel = driver.find_element_by_xpath('//a[contains(@href,"' + channel + '")]')
