@@ -41,7 +41,7 @@ def takeScreenshot():
 
 def checkCaptcha():
     try:
-        captcha = driver.find_elements_by_class_name('recaptcha-checkbox')
+        captcha = driver.find_element_by_id('recaptcha-anchor')
         captcha.click()
         time.sleep(5)
         takeScreenshot()
