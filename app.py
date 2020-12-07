@@ -37,6 +37,7 @@ def checkCaptcha():
     try:
         captcha = driver.find_elements_by_class_name('recaptcha-checkbox')
         captcha.click()
+        time.sleep(5)
     except:
         print('No se pudo resolver el captcha')
 
@@ -45,7 +46,6 @@ def getIntoServer(guild):
         server = driver.find_element_by_xpath('//div[contains(@href,"' + guild + '")]')
         server.click()
     except:
-        print("An exception occurred")
         checkCaptcha()
 
 def getIntoChannel(channel):
