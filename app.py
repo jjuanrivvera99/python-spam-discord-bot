@@ -24,7 +24,7 @@ def set_chrome_options() -> None:
     Chrome options for headless browser is enabled.
     """
     chrome_options = Options()
-    chrome_options.add_argument("--headless")
+    #chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_prefs = {}
@@ -51,8 +51,9 @@ def take_screenshot():
 
 def check_captcha():
     try:
-        captcha = driver.find_element_by_id('recaptcha-anchor')
-        captcha.click()
+        driver.execute_script('captcha = document.getElementById("recaptcha-anchor");captcha.click()')
+        #captcha = driver.find_element_by_id('recaptcha-anchor')
+        #captcha.click()
         time.sleep(5)
         take_screenshot()
     except:
