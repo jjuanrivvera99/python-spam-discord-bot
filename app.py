@@ -58,6 +58,7 @@ def check_captcha():
         take_screenshot()
     except:
         print('No se pudo resolver el captcha')
+        exit()
 
 
 def get_into_server(guild):
