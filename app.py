@@ -9,6 +9,9 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 load_dotenv()
 
@@ -51,9 +54,13 @@ def take_screenshot():
 
 def check_captcha():
     try:
-        driver.execute_script('captcha = document.getElementById("recaptcha-anchor");captcha.click()')
-        #captcha = driver.find_element_by_id('recaptcha-anchor')
-        #captcha.click()
+        # *************  locate CheckBox  **************
+        CheckBox = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, "recaptcha-anchor"))
+        )
+
+        # *************  click CheckBox  ***************
+        CheckBox.click()
         time.sleep(5)
         take_screenshot()
     except:
