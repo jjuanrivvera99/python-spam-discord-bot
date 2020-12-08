@@ -1,16 +1,23 @@
-from selenium.webdriver.chrome.options import Options
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
-from dotenv import load_dotenv
+import os
+import random
+import string
+import time
 from datetime import datetime
-import time, os, random, string
+
+from dotenv import load_dotenv
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
+
 load_dotenv()
+
 
 def get_random_string(length):
     letters = string.ascii_lowercase
     result_str = ''.join(random.choice(letters) for i in range(length))
     return result_str
+
 
 def set_chrome_options() -> None:
     """Sets chrome options for Selenium.
@@ -25,6 +32,7 @@ def set_chrome_options() -> None:
     chrome_prefs["profile.default_content_settings"] = {"images": 2}
     return chrome_options
 
+
 def login():
     time.sleep(2)
     username = driver.find_element_by_name('email')
@@ -33,45 +41,50 @@ def login():
     password.send_keys(os.getenv("PASSWORD"))
     password.send_keys(Keys.ENTER)
 
-def takeScreenshot():
-    now = datetime.now()
-    dateTimeStampString = now.strftime("%Y-%d-%m-%H-%M-%S")
-    print(dateTimeStampString)
-    driver.get_screenshot_as_file('./Screenshots/' + dateTimeStampString + '.png')
 
-def checkCaptcha():
+def take_screenshot():
+    now = datetime.now()
+    date_timestamp_string = now.strftime("%Y-%d-%m-%H-%M-%S")
+    print(date_timestamp_string)
+    driver.get_screenshot_as_file('./Screenshots/' + date_timestamp_string + '.png')
+
+
+def check_captcha():
     try:
         captcha = driver.find_element_by_id('recaptcha-anchor')
         captcha.click()
         time.sleep(5)
-        takeScreenshot()
+        take_screenshot()
     except:
         print('No se pudo resolver el captcha')
 
-def getIntoServer(guild):
+
+def get_into_server(guild):
     try:
         server = driver.find_element_by_xpath('//div[contains(@href,"' + guild + '")]')
         server.click()
     except:
-        checkCaptcha()
+        check_captcha()
 
-def getIntoChannel(channel):
+
+def get_into_channel(channel):
     channel = driver.find_element_by_xpath('//a[contains(@href,"' + channel + '")]')
     channel.click()
+
 
 if __name__ == "__main__":
     driver = webdriver.Chrome(options=set_chrome_options())
     driver.get('https://discord.com/login')
     login()
     time.sleep(5)
-    takeScreenshot()
-    getIntoServer(os.getenv("SERVER"))
+    take_screenshot()
+    get_into_server(os.getenv("SERVER"))
     time.sleep(2)
-    getIntoChannel(os.getenv("CHANNEL"))
+    get_into_channel(os.getenv("CHANNEL"))
     time.sleep(3)
     pretextArea = driver.find_element_by_xpath('//div[contains(@class,"textArea")]')
     textArea = pretextArea.find_element_by_xpath('//div[contains(@class,"slateTextArea")]')
-    
+
     while True:
         actions = ActionChains(driver)
         element = actions.move_to_element(textArea)
